@@ -1,5 +1,3 @@
-
-// Top-level UART module for serial communication
 module TX(
   input        clk,
   input        txrst,
@@ -69,7 +67,7 @@ module UART_tx2 (
 );
   // State machine parameters
   parameter IDLE  = 2'b00, START = 2'b01, DATA = 2'b10, STOP = 2'b11;
-  parameter CLKS_PER_BIT = 16; // Clock cycles per bit (for simulation)
+  parameter CLKS_PER_BIT = 16;
   parameter CLKSidel = 20;
   // Internal registers
   reg [7:0]  data_buff=0;     // Data buffer for transmission
