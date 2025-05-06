@@ -1,0 +1,33 @@
+module tx_tb;
+
+    // Testbench signals
+    reg clk;
+    wire led;
+
+    // Instantiate the TX module
+    TX dut (
+        .clk(clk),
+        .led(led)
+    );
+
+    // Clock generation: 100 MHz (10 ns period)
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk; // Toggle clock every 5 ns
+    end
+
+    // Initial setup and simulation control
+    initial begin
+        // Initialize VCD dump for waveform viewing
+        $dumpfile("tx_tb.vcd");
+        $dumpvars(0, tx_tb);
+
+        // Monitor signals for debugging
+        $monitor("Time=%0t clk=%b counter=%0d led=%b", $time, clk, dut.counter, led);
+
+        // Run simulation for 5 seconds (5,000,000,000 ns)
+        #5000000000 $display("Simulation ended at time %0t", $time);
+        $finish;
+    end
+
+endmodule

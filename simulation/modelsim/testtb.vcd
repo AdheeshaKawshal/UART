@@ -1,0 +1,610 @@
+$date
+	Mon Apr 28 18:34:35 2025
+$end
+$version
+	ModelSim Version 2020.1
+$end
+$timescale
+	1ns
+$end
+
+$scope module test1_tb $end
+$var wire 1 ! cltx $end
+$var wire 1 " clrx $end
+$var wire 1 # data_in $end
+$var reg 1 $ clk $end
+$var wire 1 % dt $end
+$var wire 1 & count [3] $end
+$var wire 1 ' count [2] $end
+$var wire 1 ( count [1] $end
+$var wire 1 ) count [0] $end
+$var wire 1 * statt [1] $end
+$var wire 1 + statt [0] $end
+$var wire 1 , statr [1] $end
+$var wire 1 - statr [0] $end
+$var wire 1 . data [7] $end
+$var wire 1 / data [6] $end
+$var wire 1 0 data [5] $end
+$var wire 1 1 data [4] $end
+$var wire 1 2 data [3] $end
+$var wire 1 3 data [2] $end
+$var wire 1 4 data [1] $end
+$var wire 1 5 data [0] $end
+$var wire 1 6 data_out [7] $end
+$var wire 1 7 data_out [6] $end
+$var wire 1 8 data_out [5] $end
+$var wire 1 9 data_out [4] $end
+$var wire 1 : data_out [3] $end
+$var wire 1 ; data_out [2] $end
+$var wire 1 < data_out [1] $end
+$var wire 1 = data_out [0] $end
+
+$scope module uut $end
+$var parameter 32 > CLK_FREQ $end
+$var parameter 32 ? BAUD_RATE $end
+$var wire 1 @ clk $end
+$var wire 1 A Rx $end
+$var wire 1 B Tx $end
+$var wire 1 6 data [7] $end
+$var wire 1 7 data [6] $end
+$var wire 1 8 data [5] $end
+$var wire 1 9 data [4] $end
+$var wire 1 : data [3] $end
+$var wire 1 ; data [2] $end
+$var wire 1 < data [1] $end
+$var wire 1 = data [0] $end
+$var wire 1 C datal $end
+$var wire 1 D tx [7] $end
+$var wire 1 E tx [6] $end
+$var wire 1 F tx [5] $end
+$var wire 1 G tx [4] $end
+$var wire 1 H tx [3] $end
+$var wire 1 I tx [2] $end
+$var wire 1 J tx [1] $end
+$var wire 1 K tx [0] $end
+$var wire 1 L rx [7] $end
+$var wire 1 M rx [6] $end
+$var wire 1 N rx [5] $end
+$var wire 1 O rx [4] $end
+$var wire 1 P rx [3] $end
+$var wire 1 Q rx [2] $end
+$var wire 1 R rx [1] $end
+$var wire 1 S rx [0] $end
+$var wire 1 T dtx $end
+$var reg 1 U clkn $end
+$var reg 8 V fixed_data [7:0] $end
+$var wire 1 W data2 [7] $end
+$var wire 1 X data2 [6] $end
+$var wire 1 Y data2 [5] $end
+$var wire 1 Z data2 [4] $end
+$var wire 1 [ data2 [3] $end
+$var wire 1 \ data2 [2] $end
+$var wire 1 ] data2 [1] $end
+$var wire 1 ^ data2 [0] $end
+$var reg 32 _ counter [31:0] $end
+$var reg 32 ` countbyte [31:0] $end
+$var reg 64 a buff [63:0] $end
+$var wire 1 b stat $end
+
+$scope module TX $end
+$var parameter 2 c IDLE $end
+$var parameter 2 d START $end
+$var parameter 2 e DATA $end
+$var parameter 2 f STOP $end
+$var parameter 32 g CLKS_PER_BIT $end
+$var parameter 32 h CLKSidel $end
+$var wire 1 i clk $end
+$var wire 1 j rst_n $end
+$var wire 1 k data [7] $end
+$var wire 1 l data [6] $end
+$var wire 1 m data [5] $end
+$var wire 1 n data [4] $end
+$var wire 1 o data [3] $end
+$var wire 1 p data [2] $end
+$var wire 1 q data [1] $end
+$var wire 1 r data [0] $end
+$var wire 1 s baudrate $end
+$var wire 1 t start $end
+$var reg 1 u data_out $end
+$var reg 8 v test [7:0] $end
+$var reg 2 w dt [1:0] $end
+$var reg 1 x status $end
+$var reg 8 y data_buff [7:0] $end
+$var reg 1 z curr_stat $end
+$var reg 16 { clk_counter [15:0] $end
+$var reg 4 | flag [3:0] $end
+$var reg 2 } STATE [1:0] $end
+$var reg 32 ~ counter [31:0] $end
+$var reg 4 !! bit_counter [3:0] $end
+$var reg 1 "! stat $end
+$upscope $end
+
+$scope module RX $end
+$var parameter 32 #! CLKS_PER_BIT $end
+$var parameter 2 $! IDLE $end
+$var parameter 2 %! START $end
+$var parameter 2 &! DATA $end
+$var parameter 2 '! STOP $end
+$var wire 1 (! clk $end
+$var wire 1 A data_in $end
+$var reg 8 )! test [7:0] $end
+$var reg 8 *! data_val [7:0] $end
+$var reg 2 +! st [1:0] $end
+$var reg 1 ,! dt $end
+$var reg 8 -! data [7:0] $end
+$var reg 4 .! count [3:0] $end
+$var reg 16 /! clk_counter [15:0] $end
+$var reg 4 0! filtercount [3:0] $end
+$var reg 65 1! data_buffrx [64:0] $end
+$var reg 2 2! STATE [1:0] $end
+$var reg 4 3! bitcount [3:0] $end
+$var reg 1 4! flag $end
+$var reg 1 5! statflag $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#1
+$dumpvars
+1$
+xU
+b110001 V
+b1 _
+b0 `
+b10010001101000101011000010010 a
+xu
+bx v
+bx w
+xx
+b0 y
+xz
+bx {
+b0 |
+b0 }
+b0 ~
+b0 !!
+1"!
+bx )!
+bx *!
+bx +!
+x,!
+bx -!
+bx .!
+bx /!
+bx 0!
+bx 1!
+b0 2!
+bx 3!
+14!
+15!
+b10111110101111000010000000 >
+b10010110000000 ?
+b0 c
+b1 d
+b10 e
+b11 f
+b10000 g
+b11001000 h
+b10000 #!
+b0 $!
+b1 %!
+b10 &!
+b11 '!
+z!
+z"
+z#
+z%
+z)
+z(
+z'
+z&
+z+
+z*
+z-
+z,
+z5
+z4
+z3
+z2
+z1
+z0
+z/
+z.
+x=
+x<
+x;
+x:
+x9
+x8
+x7
+x6
+zC
+xK
+xJ
+xI
+xH
+xG
+xF
+xE
+xD
+xS
+xR
+xQ
+xP
+xO
+xN
+xM
+xL
+zT
+z^
+z]
+z\
+z[
+zZ
+zY
+zX
+zW
+xb
+1@
+zA
+xB
+x(!
+1t
+1j
+1s
+1r
+0q
+0p
+0o
+1n
+1m
+0l
+0k
+xi
+$end
+#2
+0$
+0@
+#3
+1$
+1@
+b10 _
+#4
+0$
+0@
+#5
+1$
+1@
+b11 _
+#6
+0$
+0@
+#7
+1$
+1@
+b100 _
+#8
+0$
+0@
+#9
+1$
+1@
+b101 _
+#10
+0$
+0@
+#11
+1$
+1@
+b110 _
+#12
+0$
+0@
+#13
+1$
+1@
+b111 _
+#14
+0$
+0@
+#15
+1$
+1@
+b1000 _
+#16
+0$
+0@
+#17
+1$
+1@
+b1001 _
+#18
+0$
+0@
+#19
+1$
+1@
+b1010 _
+#20
+0$
+0@
+#21
+1$
+1@
+b1011 _
+#22
+0$
+0@
+#23
+1$
+1@
+b1100 _
+#24
+0$
+0@
+#25
+1$
+1@
+b1101 _
+#26
+0$
+0@
+#27
+1$
+1@
+b1110 _
+#28
+0$
+0@
+#29
+1$
+1@
+b1111 _
+#30
+0$
+0@
+#31
+1$
+1@
+b10000 _
+#32
+0$
+0@
+#33
+1$
+1@
+b10001 _
+#34
+0$
+0@
+#35
+1$
+1@
+b10010 _
+#36
+0$
+0@
+#37
+1$
+1@
+b10011 _
+#38
+0$
+0@
+#39
+1$
+1@
+b10100 _
+#40
+0$
+0@
+#41
+1$
+1@
+b10101 _
+#42
+0$
+0@
+#43
+1$
+1@
+b10110 _
+#44
+0$
+0@
+#45
+1$
+1@
+b10111 _
+#46
+0$
+0@
+#47
+1$
+1@
+b11000 _
+#48
+0$
+0@
+#49
+1$
+1@
+b11001 _
+#50
+0$
+0@
+#51
+1$
+1@
+b11010 _
+#52
+0$
+0@
+#53
+1$
+1@
+b11011 _
+#54
+0$
+0@
+#55
+1$
+1@
+b11100 _
+#56
+0$
+0@
+#57
+1$
+1@
+b11101 _
+#58
+0$
+0@
+#59
+1$
+1@
+b11110 _
+#60
+0$
+0@
+#61
+1$
+1@
+b11111 _
+#62
+0$
+0@
+#63
+1$
+1@
+b100000 _
+#64
+0$
+0@
+#65
+1$
+1@
+b100001 _
+#66
+0$
+0@
+#67
+1$
+1@
+b100010 _
+#68
+0$
+0@
+#69
+1$
+1@
+b100011 _
+#70
+0$
+0@
+#71
+1$
+1@
+b100100 _
+#72
+0$
+0@
+#73
+1$
+1@
+b100101 _
+#74
+0$
+0@
+#75
+1$
+1@
+b100110 _
+#76
+0$
+0@
+#77
+1$
+1@
+b100111 _
+#78
+0$
+0@
+#79
+1$
+1@
+b101000 _
+#80
+0$
+0@
+#81
+1$
+1@
+b101001 _
+#82
+0$
+0@
+#83
+1$
+1@
+b101010 _
+#84
+0$
+0@
+#85
+1$
+1@
+b101011 _
+#86
+0$
+0@
+#87
+1$
+1@
+b101100 _
+#88
+0$
+0@
+#89
+1$
+1@
+b101101 _
+#90
+0$
+0@
+#91
+1$
+1@
+b101110 _
+#92
+0$
+0@
+#93
+1$
+1@
+b101111 _
+#94
+0$
+0@
+#95
+1$
+1@
+b110000 _
+#96
+0$
+0@
+#97
+1$
+1@
+b110001 _
+#98
+0$
+0@
+#99
+1$
+1@
+b110010 _
+#100
+0$
+0@

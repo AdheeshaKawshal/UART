@@ -1,0 +1,4 @@
+Warning (10268): Verilog HDL information at TX.v(22): always construct contains both blocking and non-blocking assignments File: D:/UART/TX.v Line: 22
+Info (10281): Verilog HDL Declaration information at TX.v(8): object "Tx" differs only in case from object "TX" in the same scope File: D:/UART/TX.v Line: 8
+Info (10281): Verilog HDL Declaration information at TX.v(7): object "Rx" differs only in case from object "RX" in the same scope File: D:/UART/TX.v Line: 7
+Info (10281): Verilog HDL Declaration information at TX.v(66): object "data" differs only in case from object "DATA" in the same scope File: D:/UART/TX.v Line: 66

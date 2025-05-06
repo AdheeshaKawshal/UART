@@ -1,38 +1,31 @@
 
 // Top-level UART module for serial communication
-module TX #(
-  parameter CLK_FREQ = 50000000, // System clock frequency (50 MHz)
-  parameter BAUD_RATE = 9600     // Desired baud rate
-) (
+module TX(
   input        clk,
-	input btn,// System clock
-  input   Rx,       // Serial input (receive)
-  output  Tx,       // D12 Serial output (transmit)
-  output [7:0] data      // Received data output
+  input        txrst,
+  input        rxrst,
+  input        Rx,       // Serial input (receive)
+  output       Tx,       // D12 Serial output (transmit)
+  output [7:0] data,      // Received data output
+  output reg [7:0] tx_data
 );
-  // Internal signals
-  wire       datal;        // TX to RX loopback connection
-  wire [7:0] tx;           // Unused TX test output
-  wire [7:0] rx;           // Unused RX test output
-  wire       dtx;          // Unused TX debug signal
-  reg        clkn;         // Divided clock for TX/RX
-  reg [7:0] fixed_data;//= 8'b00001000; // Fixed data to transmit
-  wire [7:0] data2;        // Received data from RX
+  // Internal signals        // Unused TX debug signal
+  reg        clkn=0;         // Divided clock for TX/RX
+  reg [7:0] fixed_data=8'b01001000; // Fixed data to transmit
   reg [31:0] counter = 0;  // Clock divider counter
   reg [31:0] countbyte=0;
-  reg [63:0] buff =64'h123456789; //   00010010 00110100 01010110 00010001
+  reg [63:0] buff =64'h987654321; //   00010010 00110100 01010110 00010001
   wire stat;
   reg flg=1;
-  wire t;
 
   // Clock divider to generate baud rate clock
   always @(posedge clk) begin
     counter <= counter + 1;
-	 
-    if (counter == 152) begin //152 325Incorrect: Should be CLKS_PER_BIT/2 (e.g., 5208/2)
+	 tx_data=fixed_data;
+    if (counter == 90000) begin // 325Incorrect: Should be CLKS_PER_BIT/2 (e.g., 5208/2)
       counter <= 1;
+		countbyte<=countbyte+1;
       clkn <= ~clkn;
-		//Tx<= ~Tx;
     end
 	 if (stat&& flg) begin
 		fixed_data<=buff[7:0];
@@ -50,10 +43,7 @@ module TX #(
     .clk(clkn),
     .data(fixed_data),
     .data_out(Tx),
-    .baudrate(1'b1), // Unused
-    .rst_n(1'b1),    // Hardcoded: Should be input
-    .start(1'b1),    // Hardcoded: Should be controlled
-    .test(tx),
+    .rst_n(txrst),    // Hardcoded: Should be input   // Hardcoded: Should be controlled
     .status(stat)
   );
 
@@ -61,8 +51,9 @@ module TX #(
   UART_rx2 RX (
     .clk(clkn),
     .data_in(Rx),
-    .data_val(data),           // Unconnected
-    .btn(btn)
+    .data_out(data),           // Unconnected
+    .rst_n(rxrst)
+	 
 	 // Unconnected
   );
 
@@ -73,21 +64,17 @@ module UART_tx2 (
   input        clk,       // Divided clock
   input        rst_n,     // Active-low reset
   input [7:0]  data,      // Data to transmit
-  input        baudrate,  // Unused baud rate control
-  input        start,     // Start transmission signal
   output reg   data_out,  // Serial output
-  output reg [7:0] test,  // Debug output (data buffer)
-  output reg [1:0] dt,
-	output reg status// Debug output (state)
+  output reg   status// Debug output (state)
 );
   // State machine parameters
   parameter IDLE  = 2'b00, START = 2'b01, DATA = 2'b10, STOP = 2'b11;
   parameter CLKS_PER_BIT = 16; // Clock cycles per bit (for simulation)
-  parameter CLKSidel = 750000; //63000
+  parameter CLKSidel = 20;
   // Internal registers
   reg [7:0]  data_buff=0;     // Data buffer for transmission
   reg        curr_stat;     // Tracks start status
-  reg [19:0] clk_counter;   // Counts clock cycles per bit
+  reg [15:0] clk_counter;   // Counts clock cycles per bit
   reg [3:0]  flag = 0;      // Bit counter (should use bit_counter)
   reg [1:0]  STATE = IDLE;  // State machine register
   reg [31:0] counter = 0;   // Unused
@@ -95,18 +82,17 @@ module UART_tx2 (
   reg        stat = 1;      // Initialization flag (causes Error 10200)
 	
   // State machine and transmission logic
-  always @(posedge clk) begin // Should be @(posedge clk or negedge rst_n)
-    if (stat) begin
+  always @(posedge clk or negedge rst_n) begin // Should be @(posedge clk or negedge rst_n)
+    if (!rst_n) begin
       // Initialize on first cycle (non-synthesizable; use rst_n)
-      data_out <= 1;         // Idle high           // Clear test output
+      data_out <= 1;         // Idle high
       data_buff <= data;     // Load data
-      clk_counter <= 0;      // Reset counter
-      curr_stat <= start;    // Track start
-      stat <= 0;             // Disable initialization
+      clk_counter <= 0; 
+			status<=1;// Reset counter           // Disable initialization
     end else begin
       case (STATE)
         IDLE: begin
-          if (~curr_stat && clk_counter < CLKSidel ) begin
+          if (clk_counter < CLKSidel ) begin
             data_out <= 1;     // Stay idle
             data_buff <= data; // Reload data
 				clk_counter <= clk_counter +1;
@@ -125,7 +111,6 @@ module UART_tx2 (
 				data_buff <= data;
             clk_counter <= clk_counter + 1;
           end else begin
-            test <= data_out;
             clk_counter <= 0;
             STATE <= DATA;
             flag <= 0;         // Reset bit counter
@@ -153,14 +138,14 @@ module UART_tx2 (
             STATE <= STOP;
             clk_counter <= clk_counter + 1;
           end else begin
-            data_out <= 1;     // Idle  // Debug signal
+            data_out <= 1;     // Idle
             STATE <= IDLE;
-            curr_stat <= 0;    // Reset start
+				status<=1;
           end
         end
         default: STATE <= IDLE;
       endcase
-    end // Debug state output
+    end
   end
 
 endmodule
@@ -170,16 +155,13 @@ module UART_rx2 #(
   parameter CLKS_PER_BIT = 16 // Clock cycles per bit (for simulation)
 ) (
   input        clk,       // Divided clock
+   input    rst_n, 
   input        data_in,   // Serial input
-  output reg [7:0] test,  // Debug output (received data)
-  output reg [7:0] data_val, // Received data
-  output reg [1:0] st,    // Debug output (state)
-  output reg   dt  ,
-	input btn// Debug output (data bit)
+  output reg [7:0] data_out // Received data
 );
   // State machine parameters
   parameter IDLE  = 2'b00, START = 2'b01, DATA = 2'b10, STOP = 2'b11;
-  reg [7:0] data;
+  reg [7:0] data_val;
   // Internal registers
   reg [3:0]  count;         // Unused
   reg [15:0] clk_counter;   // Counts clock cycles per bit
@@ -191,24 +173,23 @@ module UART_rx2 #(
   reg        statflag = 1;  // Initialization flag (non-synthesizable)
 
   // State machine and reception logic
-  always @(posedge clk) begin // Should add rst_n
-    if (statflag) begin
+   always @(posedge clk or negedge rst_n) begin // Should add rst_n
+    if (~rst_n) begin
       // Initialize on first cycle (non-synthesizable; use rst_n)
       count <= 0;
       //data_val <= 8'h00;
       bitcount <= 0;
       statflag <= 0;
+		data_out<=0;
     end else begin
       case (STATE)
         IDLE: begin
-          st <= STATE; // Debug state
           if (data_in==0) begin
             STATE <= START; // Detect start bit
 				clk_counter<=0;
           end
         end
         START: begin
-          st <= STATE;
 			 clk_counter <= clk_counter + 1;
           if (data_in == 0 && clk_counter == CLKS_PER_BIT/2 -1) begin
             STATE <= DATA;
@@ -231,7 +212,7 @@ module UART_rx2 #(
 				bitcount <= bitcount + 1;
           end
           if (bitcount > 7) begin
-				data<=data_val;
+				
             STATE <= STOP;
             clk_counter <= 0;
           end
@@ -239,6 +220,7 @@ module UART_rx2 #(
         end
         STOP: begin
           if (data_in && clk_counter == CLKS_PER_BIT) begin
+					data_out<=data_val;
 					STATE <= IDLE;
 			 end 
             clk_counter <= clk_counter + 1;
