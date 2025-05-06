@@ -22,7 +22,7 @@ module TX(
   always @(posedge clk) begin
     counter <= counter + 1;
 	 tx_data=fixed_data;
-    if (counter == 90000) begin // 325Incorrect: Should be CLKS_PER_BIT/2 (e.g., 5208/2)
+    if (counter == 162) begin // 50MHz/(9600*16*2) = 162
       counter <= 1;
 		countbyte<=countbyte+1;
       clkn <= ~clkn;
