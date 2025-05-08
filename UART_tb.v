@@ -3,16 +3,15 @@
 module UART_tb();
 
   reg clk;
-  reg rxrst;
-  reg txrst;
+  reg rst;
   wire tx_line;
   wire [7:0]tx_data;
   wire [7:0] received_data;
+  reg tx_ctr;
   
   UART_Module uut (
     .clk(clk),
-    .rxrst(rxrst),
-	 .txrst(txrst),
+    .rst(rst),
     .Rx(tx_line),
     .Tx(tx_line),
 	 .tx_data(tx_data),
@@ -21,14 +20,12 @@ module UART_tb();
 
   initial begin
     clk = 0;
-	 	rxrst =1;
-	txrst =1;
+	 rst =1;
+	 tx_ctr=1;
 	#10;
-	rxrst =0;
-	txrst =0;
-	#2;
-	rxrst =1;
-	txrst =1;
+	rst =0;
+	#20;
+	rst =1;
     
   end
   always begin 

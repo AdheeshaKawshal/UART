@@ -3,14 +3,15 @@ module UART_tx (
   input        rst_n,     // Active-low reset
   input [7:0]  data,      // Data to transmit
   output reg   data_out,  // Serial output
-  output reg   status
+  output reg   status,
+  input        tx_ctr
 );
   parameter IDLE  = 2'b00, START = 2'b01, DATA = 2'b10, STOP = 2'b11;
   parameter CLKS_PER_BIT = 16;
-  parameter CLKSidel = 20;
+  parameter CLKSidel = 100000;
   reg [7:0]  data_buff=0;     // Data buffer for transmission
   reg        curr_stat;       // Tracks start status
-  reg [15:0] clk_counter;     // Counts clock cycles per bit
+  reg [19:0] clk_counter;     // Counts clock cycles per bit
   reg [1:0]  STATE = IDLE;    // State machine register
   reg [3:0]  bit_index = 0;   // Tracks transmitted bits
   

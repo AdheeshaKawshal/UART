@@ -7,11 +7,9 @@ module UART_rx #(
    output reg [7:0] data_out
 );
   parameter IDLE  = 2'b00, START = 2'b01, DATA = 2'b10, STOP = 2'b11;
-  reg [7:0]  data_val;
-  reg [3:0]  count;         
+  reg [7:0]  data_val;       
   reg [15:0] clk_counter;   
-  reg [3:0]  filtercount;   
-  reg [64:0] data_buffrx;   
+  reg [3:0]  filtercount;      
   reg [1:0]  STATE = IDLE; 
   reg [3:0]  bitcount;      
   reg        flag = 1;     
@@ -19,7 +17,6 @@ module UART_rx #(
   
   always @(posedge clk or negedge rst_n) begin
     if (~rst_n) begin
-      count <= 0;
       bitcount <= 0;
       statflag <= 0;
 		data_out<=0;
@@ -39,7 +36,10 @@ module UART_rx #(
 				//data_val =8'h00;
 				clk_counter<=0;
 				data_val<=8'h00;
-          end
+			 end
+			 else if (data_in == 1 && clk_counter == CLKS_PER_BIT/2 -1) begin 
+				STATE <= IDLE;
+			 end
         end
         DATA: begin
           clk_counter <= clk_counter + 1;
@@ -63,6 +63,9 @@ module UART_rx #(
         STOP: begin
           if (data_in && clk_counter == CLKS_PER_BIT) begin
 					data_out<=data_val;
+					STATE <= IDLE;
+			 end 
+			 else if (data_in==0 && clk_counter == CLKS_PER_BIT) begin
 					STATE <= IDLE;
 			 end 
             clk_counter <= clk_counter + 1;
