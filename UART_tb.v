@@ -1,38 +1,59 @@
-`timescale 10ns/1ns
+`timescale 1ns/1ns
 
-module UART_tb();
+module UART_tb;
 
+  // Testbench signals
   reg clk;
-  reg rst;
-  wire tx_line;
-  wire [7:0]tx_data;
-  wire [7:0] received_data;
   reg tx_ctr;
-  
+  reg rst;
+  reg Rx;           // Simulated receive line
+  wire Tx;          // Output from UART transmitter
+  wire [7:0] data;  // Received data
+  wire [7:0] tx_data;
+
+  // Instantiate the DUT
   UART_Module uut (
     .clk(clk),
+    .tx_ctr(tx_ctr),
     .rst(rst),
-    .Rx(tx_line),
-    .Tx(tx_line),
-	 .tx_data(tx_data),
-    .data(received_data)
+    .Rx(Tx),
+    .Tx(Tx),
+    .data(data),
+    .tx_data(tx_data)
   );
 
+  // Clock generation: 10ns period => 100MHz
+  always #1 clk = ~clk;
+
+  // Simulated RX input (not used unless you're testing loopback)
+  initial Rx = 1;
+
   initial begin
-    clk = 0;
-	 rst =1;
-	 tx_ctr=1;
-	#10;
-	rst =0;
-	#20;
-	rst =1;
-    
-  end
-  always begin 
-	 #1 clk = ~clk;
-  end 
-  initial begin
-    #1000000;
+    // Initialize inputs
+    clk     = 0;
+    rst     = 0;
+    tx_ctr  = 0;
+
+    // Reset pulse
+    #5;
+    rst = 1;
+
+    // Wait and trigger tx_ctr to start transmission
+    #2;
+    tx_ctr = 1;
+    #10;
+    tx_ctr = 0;
+
+    // Wait for several frames to be transmitted
+    #500;
+
+    // Second transmission trigger (optional)
+    tx_ctr = 1;
+    #10;
+    tx_ctr = 0;
+
+    #500;
+
   end
 
 endmodule

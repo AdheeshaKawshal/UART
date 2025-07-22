@@ -58,7 +58,7 @@ module UART_tx (
               clk_counter  <= 0;
               bit_index 	<= bit_index + 1;
             end
-          end else begin
+          end else begin 
             STATE <= STOP;   
             clk_counter <= 0;
           end
