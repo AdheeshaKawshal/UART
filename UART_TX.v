@@ -1,4 +1,4 @@
-module UART_tx (
+module UART_TX (
   input        clk,       
   input        rst_n,     // Active-low reset
   input [7:0]  data,      // Data to transmit

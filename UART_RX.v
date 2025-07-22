@@ -1,4 +1,4 @@
-module UART_rx #(
+module UART_RX #(
   parameter CLKS_PER_BIT = 16
 ) (
    input            clk,      
